@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular
 import { Controls } from '../enums/controls';
 import { PongGame } from '../classes/pong-game';
 import { Boundaries } from '../classes/boundaries';
+import { ControlState } from '../classes/control-state';
 
 @Component({
   selector: 'pong',
@@ -15,11 +16,14 @@ export class PongGameComponent implements OnInit {
   public height: number = 600;
 
   private context: CanvasRenderingContext2D;
-
   private pongGame: PongGame;
+  private ticksPerSecond: number = 60;
+
+  private controlState: ControlState; 
 
   constructor() {
     this.pongGame = new PongGame(this.height,this.width);
+    this.controlState = { upPressed: false, downPressed: false };
   }
 
   ngOnInit() {
@@ -28,7 +32,7 @@ export class PongGameComponent implements OnInit {
 
     // Game model ticks 60 times per second. Doing this keeps same game speed
     // on higher FPS environments.
-    setInterval(() => this.pongGame.tick(), 1 / 60);
+    setInterval(() => this.pongGame.tick(this.controlState), 1 / this.ticksPerSecond);
   }
 
   renderFrame(): void {
@@ -68,12 +72,22 @@ export class PongGameComponent implements OnInit {
   }
 
   @HostListener('window:keydown', ['$event'])
-  keyboardInput(event: KeyboardEvent) {
+  keyUp(event: KeyboardEvent) {
     if (event.keyCode == Controls.Up) {
-      this.pongGame.playerPaddle.moveUp();
+      this.controlState.upPressed = true;
     }
     if (event.keyCode == Controls.Down) {
-      this.pongGame.playerPaddle.moveDown();
+      this.controlState.downPressed = true;
+    }
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  keyDown(event: KeyboardEvent) {
+    if (event.keyCode == Controls.Up) {
+      this.controlState.upPressed = false;
+    }
+    if (event.keyCode == Controls.Down) {
+      this.controlState.downPressed = false;
     }
   }
 }

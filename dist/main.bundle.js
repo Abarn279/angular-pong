@@ -305,17 +305,40 @@ var Paddle = (function (_super) {
     __extends(Paddle, _super);
     function Paddle(height, width, maxSpeed, position) {
         var _this = _super.call(this, height, width, maxSpeed, position) || this;
-        _this.speedRatio = { x: 0, y: maxSpeed };
+        _this.speedRatio = { x: 0, y: 0 };
         return _this;
     }
-    Paddle.prototype.moveUp = function () {
-        // Because Y axis goes down, subtracting makes model go up
-        this.speedRatio.y = -Math.abs(this.speedRatio.y);
-        _super.prototype.move.call(this, this.speedRatio);
+    /**
+     * Accelerates towards the max speed in the down direction
+     * @param ratioChange - the percentage of the max speed that the paddle should accelerate to
+     */
+    Paddle.prototype.accelerateDown = function (ratioChange) {
+        if (ratioChange < 0 || ratioChange > 1)
+            return;
+        this.speedRatio.y = Math.min(1, this.speedRatio.y + ratioChange);
     };
-    Paddle.prototype.moveDown = function () {
-        // Because Y axis goes down, adding makes model go down
-        this.speedRatio.y = Math.abs(this.speedRatio.y);
+    /**
+     * Accelerates towards the max speed in the up direction
+     * @param ratioChange - the percentage of the max speed that the paddle should accelerate to
+     */
+    Paddle.prototype.accelerateUp = function (ratioChange) {
+        if (ratioChange < 0 || ratioChange > 1)
+            return;
+        this.speedRatio.y = Math.max(-1, this.speedRatio.y - ratioChange);
+    };
+    /**
+     * Decelerate the object towards zero
+     * @param ratioChange - the percentage of the max speed that the paddle should decelerate
+     */
+    Paddle.prototype.decelerate = function (ratioChange) {
+        if (this.speedRatio.y < 0) {
+            this.speedRatio.y = Math.max(this.speedRatio.y + ratioChange, 0);
+        }
+        if (this.speedRatio.y > 0) {
+            this.speedRatio.y = Math.min(this.speedRatio.y - ratioChange, 0);
+        }
+    };
+    Paddle.prototype.move = function () {
         _super.prototype.move.call(this, this.speedRatio);
     };
     return Paddle;
@@ -340,20 +363,29 @@ var PongGame = (function () {
         this.width = width;
         // Construct game objects
         this.ball = new __WEBPACK_IMPORTED_MODULE_0__ball__["a" /* Ball */](15, 15, 2, { x: height / 2, y: width / 2 }, { x: 1, y: 1 });
-        this.playerPaddle = new __WEBPACK_IMPORTED_MODULE_1__paddle__["a" /* Paddle */](100, 20, 6, { x: 50, y: height / 2 });
-        this.enemyPaddle = new __WEBPACK_IMPORTED_MODULE_1__paddle__["a" /* Paddle */](100, 20, .8, { x: width - 50, y: height / 2 });
+        this.playerPaddle = new __WEBPACK_IMPORTED_MODULE_1__paddle__["a" /* Paddle */](100, 20, 1, { x: 50, y: height / 2 });
+        this.enemyPaddle = new __WEBPACK_IMPORTED_MODULE_1__paddle__["a" /* Paddle */](100, 20, 1, { x: width - 50, y: height / 2 });
     }
-    PongGame.prototype.tick = function () {
+    PongGame.prototype.tick = function (controlState) {
         this.ball.move();
+        if (controlState.upPressed)
+            this.playerPaddle.accelerateUp(.1);
+        else if (controlState.downPressed)
+            this.playerPaddle.accelerateDown(.1);
+        else
+            this.playerPaddle.decelerate(.1);
+        this.playerPaddle.move();
         this.moveEnemyPaddle();
         this.checkCollisions();
     };
     PongGame.prototype.moveEnemyPaddle = function () {
         if (this.ball.getPosition().y < this.enemyPaddle.getPosition().y) {
-            this.enemyPaddle.moveUp();
+            this.enemyPaddle.accelerateUp(1);
+            this.enemyPaddle.move();
         }
         else {
-            this.enemyPaddle.moveDown();
+            this.enemyPaddle.accelerateDown(1);
+            this.enemyPaddle.move();
         }
     };
     PongGame.prototype.checkCollisions = function () {
@@ -447,7 +479,9 @@ var PongGameComponent = (function () {
     function PongGameComponent() {
         this.width = 800;
         this.height = 600;
+        this.ticksPerSecond = 60;
         this.pongGame = new __WEBPACK_IMPORTED_MODULE_2__classes_pong_game__["a" /* PongGame */](this.height, this.width);
+        this.controlState = { upPressed: false, downPressed: false };
     }
     PongGameComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -455,7 +489,7 @@ var PongGameComponent = (function () {
         this.renderFrame();
         // Game model ticks 60 times per second. Doing this keeps same game speed
         // on higher FPS environments.
-        setInterval(function () { return _this.pongGame.tick(); }, 1 / 60);
+        setInterval(function () { return _this.pongGame.tick(_this.controlState); }, 1 / this.ticksPerSecond);
     };
     PongGameComponent.prototype.renderFrame = function () {
         var _this = this;
@@ -486,12 +520,20 @@ var PongGameComponent = (function () {
         // Render next frame
         window.requestAnimationFrame(function () { return _this.renderFrame(); });
     };
-    PongGameComponent.prototype.keyboardInput = function (event) {
+    PongGameComponent.prototype.keyUp = function (event) {
         if (event.keyCode == __WEBPACK_IMPORTED_MODULE_1__enums_controls__["a" /* Controls */].Up) {
-            this.pongGame.playerPaddle.moveUp();
+            this.controlState.upPressed = true;
         }
         if (event.keyCode == __WEBPACK_IMPORTED_MODULE_1__enums_controls__["a" /* Controls */].Down) {
-            this.pongGame.playerPaddle.moveDown();
+            this.controlState.downPressed = true;
+        }
+    };
+    PongGameComponent.prototype.keyDown = function (event) {
+        if (event.keyCode == __WEBPACK_IMPORTED_MODULE_1__enums_controls__["a" /* Controls */].Up) {
+            this.controlState.upPressed = false;
+        }
+        if (event.keyCode == __WEBPACK_IMPORTED_MODULE_1__enums_controls__["a" /* Controls */].Down) {
+            this.controlState.downPressed = false;
         }
     };
     return PongGameComponent;
@@ -505,7 +547,13 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
-], PongGameComponent.prototype, "keyboardInput", null);
+], PongGameComponent.prototype, "keyUp", null);
+__decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_4" /* HostListener */])('window:keyup', ['$event']),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], PongGameComponent.prototype, "keyDown", null);
 PongGameComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_5" /* Component */])({
         selector: 'pong',
