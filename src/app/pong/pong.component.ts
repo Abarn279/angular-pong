@@ -25,6 +25,10 @@ export class PongGameComponent implements OnInit {
   ngOnInit() {
     this.context = this.canvasElement.nativeElement.getContext('2d');
     this.renderFrame();
+
+    // Game model ticks 60 times per second. Doing this keeps same game speed
+    // on higher FPS environments.
+    setInterval(() => this.pongGame.tick(), 1 / 60);
   }
 
   renderFrame(): void {
@@ -45,17 +49,19 @@ export class PongGameComponent implements OnInit {
     let bounds: Boundaries;
 
     // Draw player paddle
-    var paddleObj = this.pongGame.playerPaddle;
+    let paddleObj = this.pongGame.playerPaddle;
     bounds = paddleObj.getCollisionBoundaries();
     this.context.fillRect(bounds.left, bounds.top, paddleObj.getWidth(), paddleObj.getHeight());
 
+    // Draw enemy paddle
+    let enemyObj = this.pongGame.enemyPaddle;
+    bounds = enemyObj.getCollisionBoundaries();
+    this.context.fillRect(bounds.left, bounds.top, enemyObj.getWidth(), enemyObj.getHeight());
+
     // Draw ball
-    var ballObj = this.pongGame.ball;
+    let ballObj = this.pongGame.ball;
     bounds = ballObj.getCollisionBoundaries();
     this.context.fillRect(bounds.left, bounds.top, ballObj.getWidth(), ballObj.getHeight());
-
-    // Tick automated stuff
-    this.pongGame.tick();
 
     // Render next frame
     window.requestAnimationFrame(() => this.renderFrame());
