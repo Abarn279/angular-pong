@@ -39,7 +39,7 @@ module.exports = module.exports.toString();
 /***/ 146:
 /***/ (function(module, exports) {
 
-module.exports = "<h1>\n    Angular Pong\n</h1>\n<pong></pong>"
+module.exports = "<h1>\r\n    Angular Pong\r\n</h1>\r\n<pong></pong>"
 
 /***/ }),
 
@@ -339,28 +339,65 @@ var PongGame = (function () {
         this.height = height;
         this.width = width;
         // Construct game objects
-        this.ball = new __WEBPACK_IMPORTED_MODULE_0__ball__["a" /* Ball */](15, 15, 3, { x: height / 2, y: width / 2 }, { x: 1, y: 1 });
+        this.ball = new __WEBPACK_IMPORTED_MODULE_0__ball__["a" /* Ball */](15, 15, 2, { x: height / 2, y: width / 2 }, { x: 1, y: 1 });
         this.playerPaddle = new __WEBPACK_IMPORTED_MODULE_1__paddle__["a" /* Paddle */](100, 20, 6, { x: 50, y: height / 2 });
+        this.enemyPaddle = new __WEBPACK_IMPORTED_MODULE_1__paddle__["a" /* Paddle */](100, 20, .8, { x: width - 50, y: height / 2 });
     }
     PongGame.prototype.tick = function () {
-        // Ball tick
         this.ball.move();
+        this.moveEnemyPaddle();
+        this.checkCollisions();
+    };
+    PongGame.prototype.moveEnemyPaddle = function () {
+        if (this.ball.getPosition().y < this.enemyPaddle.getPosition().y) {
+            this.enemyPaddle.moveUp();
+        }
+        else {
+            this.enemyPaddle.moveDown();
+        }
+    };
+    PongGame.prototype.checkCollisions = function () {
+        // Bounce off top/bottom
         var ballBounds = this.ball.getCollisionBoundaries();
         if (ballBounds.bottom >= this.height || ballBounds.top <= 0)
             this.ball.reverseY();
-        if (ballBounds.right >= this.width)
-            this.ball.reverseX();
-        // Paddle hit
+        // Player paddle hit
         var paddleBounds = this.playerPaddle.getCollisionBoundaries();
         if (ballBounds.left <= paddleBounds.right &&
             paddleBounds.right - ballBounds.left <= 3 &&
             ballBounds.bottom >= paddleBounds.top &&
             ballBounds.top <= paddleBounds.bottom) {
             this.ball.reverseX();
+            // Set vertical speed ratio by taking ratio of 
+            // dist(centerOfBall, centerOfPaddle) to dist(topOfPaddle, centerOfPaddle)
+            // Negate because pixels go up as we go down :)
+            var vsr = -(this.ball.getPosition().y - this.playerPaddle.getPosition().y)
+                / (paddleBounds.top - this.playerPaddle.getPosition().y);
+            // Max vsr is 1
+            vsr = Math.min(vsr, 1);
+            this.ball.setVerticalSpeedRatio(vsr);
+        }
+        // Enemy paddle hit
+        paddleBounds = this.enemyPaddle.getCollisionBoundaries();
+        if (ballBounds.right <= paddleBounds.left &&
+            paddleBounds.left - ballBounds.right <= 3 &&
+            ballBounds.bottom >= paddleBounds.top &&
+            ballBounds.top <= paddleBounds.bottom) {
+            this.ball.reverseX();
+            // Set vertical speed ratio by taking ratio of 
+            // dist(centerOfBall, centerOfPaddle) to dist(topOfPaddle, centerOfPaddle)
+            // Negate because pixels go up as we go down :)
+            var vsr = -(this.ball.getPosition().y - this.enemyPaddle.getPosition().y)
+                / (paddleBounds.top - this.enemyPaddle.getPosition().y);
+            // Max vsr is 1
+            vsr = Math.min(vsr, 1);
+            this.ball.setVerticalSpeedRatio(vsr);
         }
     };
     PongGame.prototype.gameOver = function () {
-        if (this.ball.getCollisionBoundaries().left <= 0)
+        var collisionBoundaries = this.ball.getCollisionBoundaries();
+        if (this.ball.getCollisionBoundaries().left <= 0 ||
+            this.ball.getCollisionBoundaries().right >= this.width)
             return true;
         else
             return false;
@@ -413,8 +450,12 @@ var PongGameComponent = (function () {
         this.pongGame = new __WEBPACK_IMPORTED_MODULE_2__classes_pong_game__["a" /* PongGame */](this.height, this.width);
     }
     PongGameComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.context = this.canvasElement.nativeElement.getContext('2d');
         this.renderFrame();
+        // Game model ticks 60 times per second. Doing this keeps same game speed
+        // on higher FPS environments.
+        setInterval(function () { return _this.pongGame.tick(); }, 1 / 60);
     };
     PongGameComponent.prototype.renderFrame = function () {
         var _this = this;
@@ -434,12 +475,14 @@ var PongGameComponent = (function () {
         var paddleObj = this.pongGame.playerPaddle;
         bounds = paddleObj.getCollisionBoundaries();
         this.context.fillRect(bounds.left, bounds.top, paddleObj.getWidth(), paddleObj.getHeight());
+        // Draw enemy paddle
+        var enemyObj = this.pongGame.enemyPaddle;
+        bounds = enemyObj.getCollisionBoundaries();
+        this.context.fillRect(bounds.left, bounds.top, enemyObj.getWidth(), enemyObj.getHeight());
         // Draw ball
         var ballObj = this.pongGame.ball;
         bounds = ballObj.getCollisionBoundaries();
         this.context.fillRect(bounds.left, bounds.top, ballObj.getWidth(), ballObj.getHeight());
-        // Tick automated stuff
-        this.pongGame.tick();
         // Render next frame
         window.requestAnimationFrame(function () { return _this.renderFrame(); });
     };
