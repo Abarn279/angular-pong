@@ -1,0 +1,498 @@
+webpackJsonp([1,4],{
+
+/***/ 143:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(27)(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ 144:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(27)(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ 146:
+/***/ (function(module, exports) {
+
+module.exports = "<h1>\n    Angular Pong\n</h1>\n<pong></pong>"
+
+/***/ }),
+
+/***/ 147:
+/***/ (function(module, exports) {
+
+module.exports = "<canvas #PongCanvas width=\"{{width}}\" height=\"{{height}}\"></canvas>"
+
+/***/ }),
+
+/***/ 172:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(75);
+
+
+/***/ }),
+
+/***/ 52:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MoveableObject; });
+var MoveableObject = (function () {
+    /**
+     * Constructs a moveable object
+     * @param {Number} height - the height of the moveable object, in pixels
+     * @param {Number} width - the width of the moveable object, in pixels
+     * @param {Number} maxSpeed - the max distance, in pixels, the object can move
+     * @param {Number} position - the initial position of the object
+     */
+    function MoveableObject(height, width, maxSpeed, position) {
+        this.height = height;
+        this.width = width;
+        this.maxSpeed = maxSpeed;
+        this.position = position;
+    }
+    /**
+     * Moves default amount, scalable by a percentage of the object's max speed
+     * @param {Number} xratio - the percentage of maxSpeed to move in x direction
+     * @param {Number} yratio - the percentage of maxSpeed to move in y direction
+     */
+    MoveableObject.prototype.move = function (speedRatio) {
+        this.position.x += this.maxSpeed * speedRatio.x;
+        this.position.y += this.maxSpeed * speedRatio.y;
+    };
+    /**
+     * @return {Position} - The current position of this object
+     */
+    MoveableObject.prototype.getPosition = function () {
+        return this.position;
+    };
+    /**
+     * @return {Boundaries} - The current boundaries of the object, helpful for collision checking
+     */
+    MoveableObject.prototype.getCollisionBoundaries = function () {
+        return {
+            top: this.position.y - this.height / 2,
+            bottom: this.position.y + this.height / 2,
+            right: this.position.x + this.width / 2,
+            left: this.position.x - this.width / 2
+        };
+    };
+    MoveableObject.prototype.getWidth = function () {
+        return this.width;
+    };
+    MoveableObject.prototype.getHeight = function () {
+        return this.height;
+    };
+    return MoveableObject;
+}());
+
+//# sourceMappingURL=moveable-object.js.map
+
+/***/ }),
+
+/***/ 74:
+/***/ (function(module, exports) {
+
+function webpackEmptyContext(req) {
+	throw new Error("Cannot find module '" + req + "'.");
+}
+webpackEmptyContext.keys = function() { return []; };
+webpackEmptyContext.resolve = webpackEmptyContext;
+module.exports = webpackEmptyContext;
+webpackEmptyContext.id = 74;
+
+
+/***/ }),
+
+/***/ 75:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__ = __webpack_require__(81);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_app_module__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__(89);
+
+
+
+
+if (__WEBPACK_IMPORTED_MODULE_3__environments_environment__["a" /* environment */].production) {
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["a" /* enableProdMode */])();
+}
+__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_2__app_app_module__["a" /* AppModule */]);
+//# sourceMappingURL=main.js.map
+
+/***/ }),
+
+/***/ 82:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(5);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+var AppComponent = (function () {
+    function AppComponent() {
+    }
+    return AppComponent;
+}());
+AppComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_5" /* Component */])({
+        selector: 'app-root',
+        template: __webpack_require__(146),
+        styles: [__webpack_require__(143)]
+    })
+], AppComponent);
+
+//# sourceMappingURL=app.component.js.map
+
+/***/ }),
+
+/***/ 83:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(79);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(80);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pong_pong_component__ = __webpack_require__(88);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+
+
+
+var AppModule = (function () {
+    function AppModule() {
+    }
+    return AppModule;
+}());
+AppModule = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_core__["b" /* NgModule */])({
+        declarations: [
+            __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */],
+            __WEBPACK_IMPORTED_MODULE_5__pong_pong_component__["a" /* PongGameComponent */]
+        ],
+        imports: [
+            __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
+            __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormsModule */],
+            __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* HttpModule */]
+        ],
+        providers: [],
+        bootstrap: [__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */]]
+    })
+], AppModule);
+
+//# sourceMappingURL=app.module.js.map
+
+/***/ }),
+
+/***/ 84:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moveable_object__ = __webpack_require__(52);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Ball; });
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+var Ball = (function (_super) {
+    __extends(Ball, _super);
+    function Ball(height, width, maxSpeed, position, speedRatio) {
+        var _this = _super.call(this, height, width, maxSpeed, position) || this;
+        _this.speedRatio = speedRatio;
+        return _this;
+    }
+    /**
+     * Reverses the ball in the x direction
+     */
+    Ball.prototype.reverseX = function () {
+        this.speedRatio.x = -this.speedRatio.x;
+    };
+    /**
+     * Reverses the ball in the y direction
+     */
+    Ball.prototype.reverseY = function () {
+        this.speedRatio.y = -this.speedRatio.y;
+    };
+    /**
+     * Sets new vertical speed ratio of max speed
+     */
+    Ball.prototype.setVerticalSpeedRatio = function (verticalSpeedRatio) {
+        this.speedRatio.y = verticalSpeedRatio;
+    };
+    /**
+     * Moves object using existing speed ratio
+     */
+    Ball.prototype.move = function () {
+        _super.prototype.move.call(this, this.speedRatio);
+    };
+    return Ball;
+}(__WEBPACK_IMPORTED_MODULE_0__moveable_object__["a" /* MoveableObject */]));
+
+//# sourceMappingURL=ball.js.map
+
+/***/ }),
+
+/***/ 85:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moveable_object__ = __webpack_require__(52);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Paddle; });
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+var Paddle = (function (_super) {
+    __extends(Paddle, _super);
+    function Paddle(height, width, maxSpeed, position) {
+        var _this = _super.call(this, height, width, maxSpeed, position) || this;
+        _this.speedRatio = { x: 0, y: maxSpeed };
+        return _this;
+    }
+    Paddle.prototype.moveUp = function () {
+        // Because Y axis goes down, subtracting makes model go up
+        this.speedRatio.y = -Math.abs(this.speedRatio.y);
+        _super.prototype.move.call(this, this.speedRatio);
+    };
+    Paddle.prototype.moveDown = function () {
+        // Because Y axis goes down, adding makes model go down
+        this.speedRatio.y = Math.abs(this.speedRatio.y);
+        _super.prototype.move.call(this, this.speedRatio);
+    };
+    return Paddle;
+}(__WEBPACK_IMPORTED_MODULE_0__moveable_object__["a" /* MoveableObject */]));
+
+//# sourceMappingURL=paddle.js.map
+
+/***/ }),
+
+/***/ 86:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ball__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__paddle__ = __webpack_require__(85);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PongGame; });
+
+
+var PongGame = (function () {
+    function PongGame(height, width) {
+        this.height = height;
+        this.width = width;
+        // Construct game objects
+        this.ball = new __WEBPACK_IMPORTED_MODULE_0__ball__["a" /* Ball */](15, 15, 3, { x: height / 2, y: width / 2 }, { x: 1, y: 1 });
+        this.playerPaddle = new __WEBPACK_IMPORTED_MODULE_1__paddle__["a" /* Paddle */](100, 20, 6, { x: 50, y: height / 2 });
+    }
+    PongGame.prototype.tick = function () {
+        // Ball tick
+        this.ball.move();
+        var ballBounds = this.ball.getCollisionBoundaries();
+        if (ballBounds.bottom >= this.height || ballBounds.top <= 0)
+            this.ball.reverseY();
+        if (ballBounds.right >= this.width)
+            this.ball.reverseX();
+        // Paddle hit
+        var paddleBounds = this.playerPaddle.getCollisionBoundaries();
+        if (ballBounds.left <= paddleBounds.right &&
+            paddleBounds.right - ballBounds.left <= 3 &&
+            ballBounds.bottom >= paddleBounds.top &&
+            ballBounds.top <= paddleBounds.bottom) {
+            this.ball.reverseX();
+        }
+    };
+    PongGame.prototype.gameOver = function () {
+        if (this.ball.getCollisionBoundaries().left <= 0)
+            return true;
+        else
+            return false;
+    };
+    return PongGame;
+}());
+
+//# sourceMappingURL=pong-game.js.map
+
+/***/ }),
+
+/***/ 87:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Controls; });
+var Controls;
+(function (Controls) {
+    Controls[Controls["Up"] = 38] = "Up";
+    Controls[Controls["Down"] = 40] = "Down";
+})(Controls || (Controls = {}));
+//# sourceMappingURL=controls.js.map
+
+/***/ }),
+
+/***/ 88:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__enums_controls__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_pong_game__ = __webpack_require__(86);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PongGameComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var PongGameComponent = (function () {
+    function PongGameComponent() {
+        this.width = 800;
+        this.height = 600;
+        this.pongGame = new __WEBPACK_IMPORTED_MODULE_2__classes_pong_game__["a" /* PongGame */](this.height, this.width);
+    }
+    PongGameComponent.prototype.ngOnInit = function () {
+        this.context = this.canvasElement.nativeElement.getContext('2d');
+        this.renderFrame();
+    };
+    PongGameComponent.prototype.renderFrame = function () {
+        var _this = this;
+        // Only run if game still going
+        if (this.pongGame.gameOver()) {
+            this.context.font = "30px Arial";
+            this.context.fillText("Game Over!", 50, 50);
+            return;
+        }
+        // Draw background
+        this.context.fillStyle = 'rgb(0,0,0)';
+        this.context.fillRect(0, 0, this.width, this.height);
+        // Set to white for game objects
+        this.context.fillStyle = 'rgb(255,255,255)';
+        var bounds;
+        // Draw player paddle
+        var paddleObj = this.pongGame.playerPaddle;
+        bounds = paddleObj.getCollisionBoundaries();
+        this.context.fillRect(bounds.left, bounds.top, paddleObj.getWidth(), paddleObj.getHeight());
+        // Draw ball
+        var ballObj = this.pongGame.ball;
+        bounds = ballObj.getCollisionBoundaries();
+        this.context.fillRect(bounds.left, bounds.top, ballObj.getWidth(), ballObj.getHeight());
+        // Tick automated stuff
+        this.pongGame.tick();
+        // Render next frame
+        window.requestAnimationFrame(function () { return _this.renderFrame(); });
+    };
+    PongGameComponent.prototype.keyboardInput = function (event) {
+        if (event.keyCode == __WEBPACK_IMPORTED_MODULE_1__enums_controls__["a" /* Controls */].Up) {
+            this.pongGame.playerPaddle.moveUp();
+        }
+        if (event.keyCode == __WEBPACK_IMPORTED_MODULE_1__enums_controls__["a" /* Controls */].Down) {
+            this.pongGame.playerPaddle.moveDown();
+        }
+    };
+    return PongGameComponent;
+}());
+__decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_3" /* ViewChild */])('PongCanvas'),
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["K" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["K" /* ElementRef */]) === "function" && _a || Object)
+], PongGameComponent.prototype, "canvasElement", void 0);
+__decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_4" /* HostListener */])('window:keydown', ['$event']),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], PongGameComponent.prototype, "keyboardInput", null);
+PongGameComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_5" /* Component */])({
+        selector: 'pong',
+        template: __webpack_require__(147),
+        styles: [__webpack_require__(144)]
+    }),
+    __metadata("design:paramtypes", [])
+], PongGameComponent);
+
+var _a;
+//# sourceMappingURL=pong.component.js.map
+
+/***/ }),
+
+/***/ 89:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return environment; });
+// The file contents for the current environment will overwrite these during build.
+// The build system defaults to the dev environment which uses `environment.ts`, but if you do
+// `ng build --env=prod` then `environment.prod.ts` will be used instead.
+// The list of which env maps to which file can be found in `.angular-cli.json`.
+// The file contents for the current environment will overwrite these during build.
+var environment = {
+    production: false
+};
+//# sourceMappingURL=environment.js.map
+
+/***/ })
+
+},[172]);
+//# sourceMappingURL=main.bundle.js.map
