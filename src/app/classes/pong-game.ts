@@ -17,30 +17,40 @@ export class PongGame {
 
         // Construct game objects
         this.ball = new Ball(15, 15, 2, { x: height / 2, y: width / 2 }, { x: 1, y: 1 });
-        this.playerPaddle = new Paddle(100, 20, 1, { x: 50, y: height / 2 });
-        this.enemyPaddle = new Paddle(100, 20, 1, { x: width - 50, y: height / 2 })
+        this.playerPaddle = new Paddle(100, 20, 1.5, { x: 50, y: height / 2 });
+        this.enemyPaddle = new Paddle(100, 20, .8, { x: width - 50, y: height / 2 })
     }
 
     tick(controlState: ControlState) {
         this.ball.move();
-        if (controlState.upPressed) this.playerPaddle.accelerateUp(.1);
-        else if (controlState.downPressed) this.playerPaddle.accelerateDown(.1);
-        else this.playerPaddle.decelerate(.1);
 
+        // Set acceleration, move player paddle based on input
+        var paddleBounds = this.playerPaddle.getCollisionBoundaries();
+        if (controlState.upPressed && paddleBounds.top > 0) {
+            this.playerPaddle.accelerateUp(.03);
+        }
+
+        else if (controlState.downPressed && paddleBounds.bottom < this.height) {
+            this.playerPaddle.accelerateDown(.03);
+        }
+
+        else {
+            this.playerPaddle.decelerate(.05);
+        }
         this.playerPaddle.move();
+
         this.moveEnemyPaddle();
         this.checkCollisions();
     }
 
     private moveEnemyPaddle() {
-        if (this.ball.getPosition().y < this.enemyPaddle.getPosition().y) {
+        if (this.ball.getPosition().y < this.enemyPaddle.getPosition().y)
             this.enemyPaddle.accelerateUp(1)
-            this.enemyPaddle.move()
-        }
-        else {
+        else 
             this.enemyPaddle.accelerateDown(1)
-            this.enemyPaddle.move()
-        }
+        
+        this.enemyPaddle.move()
+
     }
 
     private checkCollisions() {
@@ -49,8 +59,13 @@ export class PongGame {
         if (ballBounds.bottom >= this.height || ballBounds.top <= 0)
             this.ball.reverseY();
 
-        // Player paddle hit
         let paddleBounds = this.playerPaddle.getCollisionBoundaries();
+
+        // Don't let paddle go past boundaries
+        if (paddleBounds.top <= 0 || paddleBounds.bottom >= this.height)
+            this.playerPaddle.decelerate(1);
+
+        // Player paddle hit
         if (ballBounds.left <= paddleBounds.right &&
             paddleBounds.right - ballBounds.left <= 3 &&
             ballBounds.bottom >= paddleBounds.top &&

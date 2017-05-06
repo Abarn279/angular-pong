@@ -34,10 +34,10 @@ export class Paddle extends MoveableObject {
      */
     decelerate(ratioChange: number) {
         if (this.speedRatio.y < 0) {
-            this.speedRatio.y = Math.max(this.speedRatio.y + ratioChange, 0);
+            this.speedRatio.y = Math.min(this.speedRatio.y + ratioChange, 0);
         }
         if (this.speedRatio.y > 0) { 
-            this.speedRatio.y = Math.min(this.speedRatio.y - ratioChange, 0);
+            this.speedRatio.y = Math.max(this.speedRatio.y - ratioChange, 0);
         }
     }
 

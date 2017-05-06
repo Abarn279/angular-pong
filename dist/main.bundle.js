@@ -39,7 +39,7 @@ module.exports = module.exports.toString();
 /***/ 146:
 /***/ (function(module, exports) {
 
-module.exports = "<h1>\r\n    Angular Pong\r\n</h1>\r\n<pong></pong>"
+module.exports = "<h1>\n    Angular Pong\n</h1>\n<p>\n    Controls: Up/Down Arrows\n</p>\n<pong></pong>"
 
 /***/ }),
 
@@ -332,10 +332,10 @@ var Paddle = (function (_super) {
      */
     Paddle.prototype.decelerate = function (ratioChange) {
         if (this.speedRatio.y < 0) {
-            this.speedRatio.y = Math.max(this.speedRatio.y + ratioChange, 0);
+            this.speedRatio.y = Math.min(this.speedRatio.y + ratioChange, 0);
         }
         if (this.speedRatio.y > 0) {
-            this.speedRatio.y = Math.min(this.speedRatio.y - ratioChange, 0);
+            this.speedRatio.y = Math.max(this.speedRatio.y - ratioChange, 0);
         }
     };
     Paddle.prototype.move = function () {
@@ -363,38 +363,43 @@ var PongGame = (function () {
         this.width = width;
         // Construct game objects
         this.ball = new __WEBPACK_IMPORTED_MODULE_0__ball__["a" /* Ball */](15, 15, 2, { x: height / 2, y: width / 2 }, { x: 1, y: 1 });
-        this.playerPaddle = new __WEBPACK_IMPORTED_MODULE_1__paddle__["a" /* Paddle */](100, 20, 1, { x: 50, y: height / 2 });
-        this.enemyPaddle = new __WEBPACK_IMPORTED_MODULE_1__paddle__["a" /* Paddle */](100, 20, 1, { x: width - 50, y: height / 2 });
+        this.playerPaddle = new __WEBPACK_IMPORTED_MODULE_1__paddle__["a" /* Paddle */](100, 20, 1.5, { x: 50, y: height / 2 });
+        this.enemyPaddle = new __WEBPACK_IMPORTED_MODULE_1__paddle__["a" /* Paddle */](100, 20, .8, { x: width - 50, y: height / 2 });
     }
     PongGame.prototype.tick = function (controlState) {
         this.ball.move();
-        if (controlState.upPressed)
-            this.playerPaddle.accelerateUp(.1);
-        else if (controlState.downPressed)
-            this.playerPaddle.accelerateDown(.1);
-        else
-            this.playerPaddle.decelerate(.1);
+        // Set acceleration, move player paddle based on input
+        var paddleBounds = this.playerPaddle.getCollisionBoundaries();
+        if (controlState.upPressed && paddleBounds.top > 0) {
+            this.playerPaddle.accelerateUp(.03);
+        }
+        else if (controlState.downPressed && paddleBounds.bottom < this.height) {
+            this.playerPaddle.accelerateDown(.03);
+        }
+        else {
+            this.playerPaddle.decelerate(.05);
+        }
         this.playerPaddle.move();
         this.moveEnemyPaddle();
         this.checkCollisions();
     };
     PongGame.prototype.moveEnemyPaddle = function () {
-        if (this.ball.getPosition().y < this.enemyPaddle.getPosition().y) {
+        if (this.ball.getPosition().y < this.enemyPaddle.getPosition().y)
             this.enemyPaddle.accelerateUp(1);
-            this.enemyPaddle.move();
-        }
-        else {
+        else
             this.enemyPaddle.accelerateDown(1);
-            this.enemyPaddle.move();
-        }
+        this.enemyPaddle.move();
     };
     PongGame.prototype.checkCollisions = function () {
         // Bounce off top/bottom
         var ballBounds = this.ball.getCollisionBoundaries();
         if (ballBounds.bottom >= this.height || ballBounds.top <= 0)
             this.ball.reverseY();
-        // Player paddle hit
         var paddleBounds = this.playerPaddle.getCollisionBoundaries();
+        // Don't let paddle go past boundaries
+        if (paddleBounds.top <= 0 || paddleBounds.bottom >= this.height)
+            this.playerPaddle.decelerate(1);
+        // Player paddle hit
         if (ballBounds.left <= paddleBounds.right &&
             paddleBounds.right - ballBounds.left <= 3 &&
             ballBounds.bottom >= paddleBounds.top &&
@@ -497,6 +502,7 @@ var PongGameComponent = (function () {
         if (this.pongGame.gameOver()) {
             this.context.font = "30px Arial";
             this.context.fillText("Game Over!", 50, 50);
+            setTimeout(function () { return location.reload(); }, 500);
             return;
         }
         // Draw background
